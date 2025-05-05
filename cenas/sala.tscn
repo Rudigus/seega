@@ -1,0 +1,82 @@
+[gd_scene load_steps=7 format=3 uid="uid://53df5n5e6mb"]
+
+[ext_resource type="Script" uid="uid://cximkvpfblc74" path="res://scripts/sala.gd" id="1_aap8x"]
+[ext_resource type="StyleBox" uid="uid://yxhrwsovhxib" path="res://resources/background_menu.tres" id="1_j5jkq"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_aphqj"]
+font_size = 24
+
+[sub_resource type="Animation" id="Animation_aphqj"]
+resource_name = "label_carregando"
+length = 4.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer/CenterContainer/VBoxContainer/Label:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 1.93, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": ["Esperando um oponente", "Esperando um oponente.", "Esperando um oponente..", "Esperando um oponente..."]
+}
+
+[sub_resource type="Animation" id="Animation_aap8x"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer/CenterContainer/VBoxContainer/Label:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["Esperando um oponente..."]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_j5jkq"]
+_data = {
+&"RESET": SubResource("Animation_aap8x"),
+&"label_carregando": SubResource("Animation_aphqj")
+}
+
+[node name="Sala" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("1_j5jkq")
+script = ExtResource("1_aap8x")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 100
+
+[node name="Label" type="Label" parent="MarginContainer/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Esperando um oponente..."
+label_settings = SubResource("LabelSettings_aphqj")
+
+[node name="Button" type="Button" parent="MarginContainer/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Fechar sala"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_j5jkq")
+}
+autoplay = "label_carregando"
+
+[connection signal="pressed" from="MarginContainer/CenterContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]

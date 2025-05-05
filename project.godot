@@ -11,8 +11,18 @@ config_version=5
 [application]
 
 config/name="Seega"
+run/main_scene="uid://dc3rdpqgclr4d"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+GerenciadorConexao="*res://scripts/gerenciador_conexao.gd"
+
+[display]
+
+window/size/mode=3
+window/stretch/mode="viewport"
 
 [rendering]
 

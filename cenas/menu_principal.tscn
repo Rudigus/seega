@@ -1,0 +1,103 @@
+[gd_scene load_steps=6 format=3 uid="uid://dc3rdpqgclr4d"]
+
+[ext_resource type="StyleBox" uid="uid://yxhrwsovhxib" path="res://resources/background_menu.tres" id="1_405qn"]
+[ext_resource type="Script" uid="uid://2dwycv3txvqs" path="res://scripts/menu_principal.gd" id="1_bllnq"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_sljxu"]
+font_size = 48
+
+[sub_resource type="LabelSettings" id="LabelSettings_bllnq"]
+font_size = 24
+
+[sub_resource type="Theme" id="Theme_bllnq"]
+
+[node name="MenuPrincipal" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("1_405qn")
+script = ExtResource("1_bllnq")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 100
+
+[node name="CenterContainer" type="CenterContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Menu" type="VBoxContainer" parent="MarginContainer/CenterContainer"]
+layout_mode = 2
+
+[node name="RotuloTitulo" type="Label" parent="MarginContainer/CenterContainer/Menu"]
+layout_mode = 2
+text = "Seega"
+label_settings = SubResource("LabelSettings_sljxu")
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="MarginContainer/CenterContainer/Menu"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="BotaoCriarSala" type="Button" parent="MarginContainer/CenterContainer/Menu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Criar Sala"
+
+[node name="BotaoEntrarSala" type="Button" parent="MarginContainer/CenterContainer/Menu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Entrar em Sala"
+
+[node name="ModalEntradaSala" type="PanelContainer" parent="MarginContainer/CenterContainer"]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/CenterContainer/ModalEntradaSala"]
+layout_mode = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/CenterContainer/ModalEntradaSala/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="RotuloEntradaSala" type="Label" parent="MarginContainer/CenterContainer/ModalEntradaSala/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Entrar em Sala"
+horizontal_alignment = 1
+
+[node name="RotuloEndereco" type="Label" parent="MarginContainer/CenterContainer/ModalEntradaSala/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Nome ou endereço do servidor"
+label_settings = SubResource("LabelSettings_bllnq")
+
+[node name="CampoEndereco" type="LineEdit" parent="MarginContainer/CenterContainer/ModalEntradaSala/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/CenterContainer/ModalEntradaSala/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 20
+
+[node name="BotaoCancelar" type="Button" parent="MarginContainer/CenterContainer/ModalEntradaSala/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Voltar"
+
+[node name="BotaoConectar" type="Button" parent="MarginContainer/CenterContainer/ModalEntradaSala/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme = SubResource("Theme_bllnq")
+text = "Entrar"
+
+[connection signal="pressed" from="MarginContainer/CenterContainer/Menu/BotaoCriarSala" to="." method="_on_botao_criar_sala_pressed"]
+[connection signal="pressed" from="MarginContainer/CenterContainer/Menu/BotaoEntrarSala" to="." method="_on_botao_entrar_sala_pressed"]
+[connection signal="pressed" from="MarginContainer/CenterContainer/ModalEntradaSala/MarginContainer/VBoxContainer/HBoxContainer/BotaoCancelar" to="." method="_on_botao_cancelar_pressed"]
+[connection signal="pressed" from="MarginContainer/CenterContainer/ModalEntradaSala/MarginContainer/VBoxContainer/HBoxContainer/BotaoConectar" to="." method="_on_botao_conectar_pressed"]
