@@ -27,6 +27,8 @@ func _ready() -> void:
 			var casa = CenaCasa.instantiate()
 			casa.name = "%d,%d" % [i, j]
 			casa.position = Vector2(j * casa.get_tamanho().x, i * casa.get_tamanho().y)
+			if i == 2 && j == 2:
+				casa.modulate = Color.SADDLE_BROWN
 			add_child(casa)
 			casa.input_event.connect(casa_foi_selecionada.bind(casa.name))
 

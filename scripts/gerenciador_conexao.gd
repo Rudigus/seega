@@ -6,6 +6,7 @@ enum TipoMensagem {
 	QUEM_COMECA, # Jogador local: 0, Oponente: 1
 	COLOCA_PECA,
 	MOVE_PECA,
+	FINALIZOU_TURNO,
 	CHAT
 }
 
@@ -25,9 +26,13 @@ func enviar_mensagem(tipo: TipoMensagem, mensagem):
 	match tipo:
 		TipoMensagem.QUEM_COMECA:
 			socket.put_u8(mensagem)
+		TipoMensagem.COLOCA_PECA:
+			socket.put_u8(int(mensagem.x))
+			socket.put_u8(int(mensagem.y))
+		TipoMensagem.FINALIZOU_TURNO:
+			pass
 		TipoMensagem.CHAT:
 			socket.put_string(mensagem)
-	
 
 func receber_mensagens():
 	if socket.get_available_bytes() > 0:
@@ -36,6 +41,12 @@ func receber_mensagens():
 		match tipo:
 			TipoMensagem.QUEM_COMECA:
 				mensagem = socket.get_u8()
+			TipoMensagem.COLOCA_PECA:
+				var x = socket.get_u8()
+				var y = socket.get_u8()
+				mensagem = Vector2(x, y)
+			TipoMensagem.FINALIZOU_TURNO:
+				mensagem = null
 			TipoMensagem.CHAT:
 				mensagem = socket.get_string()
 		mensagem_recebida.emit(tipo, mensagem)
