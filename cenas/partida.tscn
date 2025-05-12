@@ -1,3 +1,9 @@
-[gd_scene format=3 uid="uid://dut0fdeuy6spy"]
+[gd_scene load_steps=3 format=3 uid="uid://dut0fdeuy6spy"]
+
+[ext_resource type="Script" uid="uid://ipyd7m0eqsqj" path="res://scripts/partida.gd" id="1_7yn5o"]
+[ext_resource type="PackedScene" uid="uid://dvj81p8pvywsw" path="res://cenas/tabuleiro.tscn" id="1_e0i4r"]
 
 [node name="Partida" type="Node2D"]
+script = ExtResource("1_7yn5o")
+
+[node name="Tabuleiro" parent="." instance=ExtResource("1_e0i4r")]

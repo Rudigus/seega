@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dvj81p8pvywsw"]
+
+[ext_resource type="Script" uid="uid://b15bcawjqe2f2" path="res://scripts/tabuleiro.gd" id="1_p3p16"]
+
+[node name="Tabuleiro" type="Node2D"]
+script = ExtResource("1_p3p16")

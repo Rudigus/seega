@@ -6,6 +6,21 @@
 [sub_resource type="LabelSettings" id="LabelSettings_aphqj"]
 font_size = 24
 
+[sub_resource type="Animation" id="Animation_aap8x"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer/CenterContainer/VBoxContainer/Label:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["Esperando um oponente..."]
+}
+
 [sub_resource type="Animation" id="Animation_aphqj"]
 resource_name = "label_carregando"
 length = 4.0
@@ -21,21 +36,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": ["Esperando um oponente", "Esperando um oponente.", "Esperando um oponente..", "Esperando um oponente..."]
-}
-
-[sub_resource type="Animation" id="Animation_aap8x"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("MarginContainer/CenterContainer/VBoxContainer/Label:text")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": ["Esperando um oponente..."]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_j5jkq"]

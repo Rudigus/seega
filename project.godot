@@ -21,7 +21,6 @@ GerenciadorConexao="*res://scripts/gerenciador_conexao.gd"
 
 [display]
 
-window/size/mode=3
 window/stretch/mode="viewport"
 
 [rendering]
