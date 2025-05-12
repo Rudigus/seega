@@ -1,9 +1,9 @@
 extends Node
 
-signal mensagem_recebida(tipo: TipoMensagem, mensagem: String)
+signal mensagem_recebida(tipo: TipoMensagem, mensagem)
 
 enum TipoMensagem {
-	QUEM_INICIA,
+	QUEM_COMECA, # Jogador local: 0, Oponente: 1
 	COLOCA_PECA,
 	MOVE_PECA,
 	CHAT
@@ -20,12 +20,22 @@ func habilitar_recebimento_mensagens(s: StreamPeerTCP):
 	timer.timeout.connect(receber_mensagens)
 	timer.start()
 
-func enviar_mensagem(tipo: TipoMensagem, mensagem: String):
+func enviar_mensagem(tipo: TipoMensagem, mensagem):
 	socket.put_u8(tipo)
-	socket.put_string(mensagem)
+	match tipo:
+		TipoMensagem.QUEM_COMECA:
+			socket.put_u8(mensagem)
+		TipoMensagem.CHAT:
+			socket.put_string(mensagem)
+	
 
 func receber_mensagens():
 	if socket.get_available_bytes() > 0:
 		var tipo = socket.get_u8()
-		var mensagem = socket.get_string()
+		var mensagem
+		match tipo:
+			TipoMensagem.QUEM_COMECA:
+				mensagem = socket.get_u8()
+			TipoMensagem.CHAT:
+				mensagem = socket.get_string()
 		mensagem_recebida.emit(tipo, mensagem)
