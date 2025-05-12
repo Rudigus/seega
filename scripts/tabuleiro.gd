@@ -50,8 +50,44 @@ func adicionar_peca(posicao_casa: Vector2, jogador_local: bool):
 	else:
 		peca.modulate = COR_OPONENTE
 		bitboard_oponente |= bit_peca
+	peca.name = "p%d,%d" % [int(posicao_casa.x), int(posicao_casa.y)]
+	add_child(peca)
+	peca.owner = self
+
+func mover_peca(posicao_antiga: Vector2, posicao_nova: Vector2, jogador_local: bool):
+	var peca = find_child("p%d,%d" % [int(posicao_antiga.x), int(posicao_antiga.y)])
+	peca.name = "p%d,%d" % [int(posicao_nova.x), int(posicao_nova.y)]
+	var posicao_x = posicao_nova.x * tamanho_casa.x + tamanho_casa.x / 2
+	var posicao_y = posicao_nova.y * tamanho_casa.y + tamanho_casa.y / 2
+	peca.position = Vector2(posicao_x, posicao_y)
+	var bit_novo = 1 << int(posicao_nova.y * NUMERO_COLUNAS + posicao_nova.x)
+	var bit_antigo = 1 << int(posicao_antiga.y * NUMERO_COLUNAS + posicao_antiga.x)
+	if jogador_local:
+		peca.modulate = COR_JOGADOR_LOCAL
+		bitboard_jogador_local ^ bit_antigo
+		bitboard_jogador_local |= bit_novo
+	else:
+		peca.modulate = COR_OPONENTE
+		bitboard_oponente ^ bit_antigo
+		bitboard_oponente |= bit_novo
 	add_child(peca)
 
 func existe_peca_em(posicao_casa) -> bool:
 	var bit_casa = 1 << int(posicao_casa.y * NUMERO_COLUNAS + posicao_casa.x)
 	return (bitboard_jogador_local | bitboard_oponente) & bit_casa
+
+func peca_jogador_local(posicao_peca) -> bool:
+	var bit_peca = 1 << int(posicao_peca.y * NUMERO_COLUNAS + posicao_peca.x)
+	return bitboard_jogador_local & bit_peca
+
+func quantidade_pecas(jogador_local: bool) -> int:
+	var numero_pecas = 0
+	var bitboard
+	if jogador_local:
+		bitboard = bitboard_jogador_local
+	else:
+		bitboard = bitboard_oponente
+	while bitboard != 0:
+		bitboard &= bitboard - 1
+		numero_pecas += 1
+	return numero_pecas
