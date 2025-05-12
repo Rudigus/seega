@@ -1,9 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://dut0fdeuy6spy"]
+[gd_scene load_steps=4 format=3 uid="uid://dut0fdeuy6spy"]
 
 [ext_resource type="Script" uid="uid://ipyd7m0eqsqj" path="res://scripts/partida.gd" id="1_7yn5o"]
 [ext_resource type="PackedScene" uid="uid://dvj81p8pvywsw" path="res://cenas/tabuleiro.tscn" id="1_e0i4r"]
+[ext_resource type="PackedScene" uid="uid://8ecqgt6n7bvu" path="res://cenas/chat.tscn" id="3_s8iwo"]
 
 [node name="Partida" type="Node2D"]
 script = ExtResource("1_7yn5o")
 
 [node name="Tabuleiro" parent="." instance=ExtResource("1_e0i4r")]
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Chat" parent="HUD" instance=ExtResource("3_s8iwo")]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+offset_left = -316.0
+offset_top = -326.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 0
+grow_vertical = 0

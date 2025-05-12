@@ -13,9 +13,13 @@ func _on_botao_entrar_sala_pressed() -> void:
 
 func _on_botao_conectar_pressed() -> void:
 	var socket = StreamPeerTCP.new()
-	GerenciadorConexao.socket = socket
 	var error = socket.connect_to_host(campo_endereco.text, GerenciadorConexao.DEFAULT_PORT)
+	var state = socket.get_status()
+	while state == StreamPeerTCP.STATUS_CONNECTING:
+		state = socket.get_status()
+		socket.poll()
 	if error == OK:
+		GerenciadorConexao.habilitar_recebimento_mensagens(socket)
 		get_tree().change_scene_to_file("res://cenas/partida.tscn")
 	else:
 		print("Erro de conexão. Descrição: %s" % error_string(error))
