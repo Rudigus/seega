@@ -69,6 +69,17 @@ grow_horizontal = 2
 text = "Etapa 1"
 label_settings = SubResource("LabelSettings_s6ucg")
 
+[node name="BotaoDesistir" type="Button" parent="HUD"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -117.0
+offset_top = 50.0
+offset_right = -50.0
+offset_bottom = 81.0
+grow_horizontal = 0
+text = "Desistir"
+
 [node name="Chat" parent="HUD" instance=ExtResource("3_s8iwo")]
 anchors_preset = 3
 anchor_left = 1.0
@@ -143,11 +154,46 @@ grow_vertical = 0
 text = "Turno do Oponente"
 label_settings = SubResource("LabelSettings_i8xwi")
 
+[node name="PainelFinal" type="PanelContainer" parent="HUD"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("4_s6ucg")
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD/PainelFinal"]
+layout_mode = 2
+theme_override_constants/margin_left = 200
+theme_override_constants/margin_top = 200
+theme_override_constants/margin_right = 200
+theme_override_constants/margin_bottom = 200
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/PainelFinal/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="MensagemFinal" type="Label" parent="HUD/PainelFinal/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="VoltarMenu" type="Button" parent="HUD/PainelFinal/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Sair"
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_i8xwi")
 }
 autoplay = "label_carregando"
 
+[connection signal="pressed" from="HUD/BotaoDesistir" to="." method="_on_botao_desistir_pressed"]
 [connection signal="pressed" from="HUD/PainelQuemComeca/MarginContainer/VBoxContainer/HBoxContainer/BotaoEu" to="." method="_on_botao_eu_pressed"]
 [connection signal="pressed" from="HUD/PainelQuemComeca/MarginContainer/VBoxContainer/HBoxContainer/BotaoOponente" to="." method="_on_botao_oponente_pressed"]
+[connection signal="pressed" from="HUD/PainelFinal/MarginContainer/VBoxContainer/VoltarMenu" to="." method="_on_voltar_menu_pressed"]

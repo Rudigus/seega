@@ -8,6 +8,7 @@ enum TipoMensagem {
 	MOVE_PECA,
 	FINALIZA_TURNO,
 	PROXIMA_ETAPA,
+	FINALIZA_PARTIDA, # Vencedor -> Jogador local: 0, Oponente: 1
 	CHAT
 }
 
@@ -37,6 +38,8 @@ func enviar_mensagem(tipo: TipoMensagem, mensagem):
 			socket.put_u8(int(mensagem[1].y))
 		TipoMensagem.FINALIZA_TURNO, TipoMensagem.PROXIMA_ETAPA:
 			pass
+		TipoMensagem.FINALIZA_PARTIDA:
+			socket.put_u8(mensagem)
 		TipoMensagem.CHAT:
 			socket.put_string(mensagem)
 
@@ -60,6 +63,8 @@ func receber_mensagens():
 				mensagem.append(Vector2(x, y))
 			TipoMensagem.FINALIZA_TURNO, TipoMensagem.PROXIMA_ETAPA:
 				mensagem = null
+			TipoMensagem.FINALIZA_PARTIDA:
+				mensagem = socket.get_u8()
 			TipoMensagem.CHAT:
 				mensagem = socket.get_string()
 		mensagem_recebida.emit(tipo, mensagem)

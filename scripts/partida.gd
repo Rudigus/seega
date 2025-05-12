@@ -6,9 +6,13 @@ extends Node2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var rotulo_etapa: Label = $HUD/RotuloEtapa
 @onready var rotulo_jogador: Label = $HUD/RotuloJogador
+@onready var mensagem_final: Label = $HUD/PainelFinal/MarginContainer/VBoxContainer/MensagemFinal
+@onready var painel_final: PanelContainer = $HUD/PainelFinal
 
 const STRING_SEU_TURNO = "Seu Turno"
 const STRING_TURNO_OPONENTE = "Turno do Oponente"
+const STRING_VENCEDOR = "Parabéns, você venceu!!!"
+const STRING_PERDEDOR = "Que pena, não foi dessa vez!"
 
 var jogador_escolhido = null
 var meu_turno: bool = false
@@ -68,6 +72,8 @@ func tratar_mensagens_recebidas(tipo: GerenciadorConexao.TipoMensagem, mensagem)
 			iniciar_turno()
 		GerenciadorConexao.TipoMensagem.PROXIMA_ETAPA:
 			iniciar_proxima_etapa()
+		GerenciadorConexao.TipoMensagem.FINALIZA_PARTIDA:
+			finalizar_partida(mensagem)
 		GerenciadorConexao.TipoMensagem.CHAT:
 			chat.adicionar_mensagem_oponente(tipo, mensagem)
 
@@ -102,3 +108,18 @@ func finalizar_turno():
 func iniciar_proxima_etapa():
 	etapa_atual = 1
 	rotulo_etapa.text = "Etapa 2"
+
+func _on_botao_desistir_pressed() -> void:
+	var vencedor = 1
+	GerenciadorConexao.enviar_mensagem(GerenciadorConexao.TipoMensagem.FINALIZA_PARTIDA, 0)
+	finalizar_partida(vencedor)
+
+func finalizar_partida(vencedor: int):
+	painel_final.show()
+	if vencedor == 0:
+		mensagem_final.text = STRING_VENCEDOR
+	else:
+		mensagem_final.text = STRING_PERDEDOR
+
+func _on_voltar_menu_pressed() -> void:
+	get_tree().change_scene_to_file("res://cenas/menu_principal.tscn")
