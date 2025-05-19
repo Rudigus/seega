@@ -50,6 +50,10 @@ func tratar_casa_selecionada(posicao_casa):
 				tabuleiro.capturar_peca(posicao_peca_capturavel, true)
 				GerenciadorConexao.enviar_mensagem(GerenciadorConexao.TipoMensagem.CAPTURA_PECA, 
 				posicao_peca_capturavel)
+				if tabuleiro.quantidade_pecas(false) == 1:
+					var vencedor = 0
+					GerenciadorConexao.enviar_mensagem(GerenciadorConexao.TipoMensagem.FINALIZA_PARTIDA, 1)
+					finalizar_partida(vencedor)
 			else:
 				jogadas_restantes -= 1
 			if jogadas_restantes == 0:
