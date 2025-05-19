@@ -29,14 +29,14 @@ func tratar_casa_selecionada(posicao_casa):
 	if not meu_turno or jogadas_restantes == 0:
 		return
 	if etapa_atual == 0:
-		if not tabuleiro.existe_peca_em(posicao_casa) and posicao_casa != Vector2(2, 2):
+		if not tabuleiro.existe_peca_em(posicao_casa) and posicao_casa != tabuleiro.POSICAO_PECA_MEIO:
 			tabuleiro.adicionar_peca(posicao_casa, true)
 			GerenciadorConexao.enviar_mensagem(GerenciadorConexao.TipoMensagem.COLOCA_PECA, posicao_casa)
 			jogadas_restantes -= 1
 			if jogadas_restantes == 0:
 				finalizar_turno()
 	else:
-		if tabuleiro.existe_peca_em(posicao_casa) and tabuleiro.peca_jogador_local(posicao_casa):
+		if tabuleiro.existe_peca_jogador_local_em(posicao_casa):
 			posicao_peca_selecionada = posicao_casa
 		elif tabuleiro.existe_peca_em(posicao_casa):
 			posicao_peca_selecionada = null
@@ -45,7 +45,13 @@ func tratar_casa_selecionada(posicao_casa):
 			GerenciadorConexao.enviar_mensagem(GerenciadorConexao.TipoMensagem.MOVE_PECA, \
 			[posicao_peca_selecionada, posicao_casa])
 			posicao_peca_selecionada = null
-			jogadas_restantes -= 1
+			var posicao_peca_capturavel = tabuleiro.peca_capturavel_por(posicao_casa)
+			if posicao_peca_capturavel != null:
+				tabuleiro.capturar_peca(posicao_peca_capturavel, true)
+				GerenciadorConexao.enviar_mensagem(GerenciadorConexao.TipoMensagem.CAPTURA_PECA, 
+				posicao_peca_capturavel)
+			else:
+				jogadas_restantes -= 1
 			if jogadas_restantes == 0:
 				finalizar_turno()
 
@@ -70,6 +76,8 @@ func tratar_mensagens_recebidas(tipo: GerenciadorConexao.TipoMensagem, mensagem)
 			tabuleiro.adicionar_peca(mensagem, false)
 		GerenciadorConexao.TipoMensagem.MOVE_PECA:
 			tabuleiro.mover_peca(mensagem[0], mensagem[1], false)
+		GerenciadorConexao.TipoMensagem.CAPTURA_PECA:
+			tabuleiro.capturar_peca(mensagem, false)
 		GerenciadorConexao.TipoMensagem.FINALIZA_TURNO:
 			iniciar_turno()
 		GerenciadorConexao.TipoMensagem.PROXIMA_ETAPA:

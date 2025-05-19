@@ -7,6 +7,7 @@ const NUMERO_LINHAS = 5
 const NUMERO_COLUNAS = 5
 const COR_JOGADOR_LOCAL = Color.BLUE
 const COR_OPONENTE = Color.RED
+const POSICAO_PECA_MEIO = Vector2(2, 2)
 
 var tamanho: Vector2
 var tamanho_casa: Vector2
@@ -73,9 +74,13 @@ func existe_peca_em(posicao_casa) -> bool:
 	var bit_casa = 1 << int(posicao_casa.y * NUMERO_COLUNAS + posicao_casa.x)
 	return (bitboard_jogador_local | bitboard_oponente) & bit_casa
 
-func peca_jogador_local(posicao_peca) -> bool:
+func existe_peca_jogador_local_em(posicao_peca) -> bool:
 	var bit_peca = 1 << int(posicao_peca.y * NUMERO_COLUNAS + posicao_peca.x)
 	return bitboard_jogador_local & bit_peca
+
+func existe_peca_oponente_em(posicao_peca) -> bool:
+	var bit_peca = 1 << int(posicao_peca.y * NUMERO_COLUNAS + posicao_peca.x)
+	return bitboard_oponente & bit_peca
 
 func quantidade_pecas(jogador_local: bool) -> int:
 	var numero_pecas = 0
@@ -100,3 +105,39 @@ func pode_mover_peca(posicao_atual, posicao_nova):
 		return true
 	else:
 		return false
+
+func peca_capturavel_por(posicao_peca_movida):
+	if posicao_peca_movida.x > 1:
+		var posicao_possivel_peca_oponente = Vector2(posicao_peca_movida.x - 1, posicao_peca_movida.y)
+		if posicao_possivel_peca_oponente != POSICAO_PECA_MEIO and \
+		existe_peca_oponente_em(posicao_possivel_peca_oponente) and \
+		existe_peca_jogador_local_em(Vector2(posicao_peca_movida.x - 2, posicao_peca_movida.y)):
+			return posicao_possivel_peca_oponente
+	if posicao_peca_movida.x < NUMERO_COLUNAS - 2:
+		var posicao_possivel_peca_oponente = Vector2(posicao_peca_movida.x + 1, posicao_peca_movida.y)
+		if posicao_possivel_peca_oponente != POSICAO_PECA_MEIO and \
+		existe_peca_oponente_em(posicao_possivel_peca_oponente) and \
+		existe_peca_jogador_local_em(Vector2(posicao_peca_movida.x + 2, posicao_peca_movida.y)):
+			return posicao_possivel_peca_oponente
+	if posicao_peca_movida.y > 1:
+		var posicao_possivel_peca_oponente = Vector2(posicao_peca_movida.x, posicao_peca_movida.y - 1)
+		if posicao_possivel_peca_oponente != POSICAO_PECA_MEIO and \
+		existe_peca_oponente_em(posicao_possivel_peca_oponente) and \
+		existe_peca_jogador_local_em(Vector2(posicao_peca_movida.x, posicao_peca_movida.y - 2)):
+			return posicao_possivel_peca_oponente
+	if posicao_peca_movida.y < NUMERO_LINHAS - 2:
+		var posicao_possivel_peca_oponente = Vector2(posicao_peca_movida.x, posicao_peca_movida.y + 1)
+		if posicao_possivel_peca_oponente != POSICAO_PECA_MEIO and \
+		existe_peca_oponente_em(posicao_possivel_peca_oponente) and \
+		existe_peca_jogador_local_em(Vector2(posicao_peca_movida.x, posicao_peca_movida.y + 2)):
+			return posicao_possivel_peca_oponente
+	return null
+
+func capturar_peca(posicao_peca, jogador_local: bool):
+	var peca = find_child("p%d,%d" % [int(posicao_peca.x), int(posicao_peca.y)])
+	peca.queue_free()
+	var bit_peca = 1 << int(posicao_peca.y * NUMERO_COLUNAS + posicao_peca.x)
+	if jogador_local:
+		bitboard_oponente ^= bit_peca
+	else:
+		bitboard_jogador_local ^= bit_peca
