@@ -5,8 +5,8 @@ signal casa_selecionada(posicao_casa)
 
 const NUMERO_LINHAS = 5
 const NUMERO_COLUNAS = 5
-const COR_JOGADOR_LOCAL = Color.RED
-const COR_OPONENTE = Color.BLUE
+const COR_JOGADOR_LOCAL = Color.BLUE
+const COR_OPONENTE = Color.RED
 
 var tamanho: Vector2
 var tamanho_casa: Vector2
@@ -63,14 +63,11 @@ func mover_peca(posicao_antiga: Vector2, posicao_nova: Vector2, jogador_local: b
 	var bit_novo = 1 << int(posicao_nova.y * NUMERO_COLUNAS + posicao_nova.x)
 	var bit_antigo = 1 << int(posicao_antiga.y * NUMERO_COLUNAS + posicao_antiga.x)
 	if jogador_local:
-		peca.modulate = COR_JOGADOR_LOCAL
-		bitboard_jogador_local ^ bit_antigo
+		bitboard_jogador_local ^= bit_antigo
 		bitboard_jogador_local |= bit_novo
 	else:
-		peca.modulate = COR_OPONENTE
-		bitboard_oponente ^ bit_antigo
+		bitboard_oponente ^= bit_antigo
 		bitboard_oponente |= bit_novo
-	add_child(peca)
 
 func existe_peca_em(posicao_casa) -> bool:
 	var bit_casa = 1 << int(posicao_casa.y * NUMERO_COLUNAS + posicao_casa.x)
@@ -91,3 +88,15 @@ func quantidade_pecas(jogador_local: bool) -> int:
 		bitboard &= bitboard - 1
 		numero_pecas += 1
 	return numero_pecas
+
+func pode_mover_peca(posicao_atual, posicao_nova):
+	if posicao_atual == null or posicao_nova == null:
+		return false
+	if existe_peca_em(posicao_nova):
+		return false
+	var diferenca_x = abs(posicao_atual.x - posicao_nova.x)
+	var diferenca_y = abs(posicao_atual.y - posicao_nova.y)
+	if (diferenca_x + diferenca_y) == 1:
+		return true
+	else:
+		return false

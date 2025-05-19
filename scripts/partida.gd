@@ -38,7 +38,9 @@ func tratar_casa_selecionada(posicao_casa):
 	else:
 		if tabuleiro.existe_peca_em(posicao_casa) and tabuleiro.peca_jogador_local(posicao_casa):
 			posicao_peca_selecionada = posicao_casa
-		if not tabuleiro.existe_peca_em(posicao_casa) and posicao_peca_selecionada != null:
+		elif tabuleiro.existe_peca_em(posicao_casa):
+			posicao_peca_selecionada = null
+		if tabuleiro.pode_mover_peca(posicao_peca_selecionada, posicao_casa):
 			tabuleiro.mover_peca(posicao_peca_selecionada, posicao_casa, true)
 			GerenciadorConexao.enviar_mensagem(GerenciadorConexao.TipoMensagem.MOVE_PECA, \
 			[posicao_peca_selecionada, posicao_casa])
@@ -96,13 +98,13 @@ func iniciar_turno():
 
 func finalizar_turno():
 	meu_turno = false
-	rotulo_jogador.text = STRING_TURNO_OPONENTE
 	if etapa_atual == 0 && tabuleiro.quantidade_pecas(true) == 12 && \
 	tabuleiro.quantidade_pecas(false) == 12:
 		GerenciadorConexao.enviar_mensagem(GerenciadorConexao.TipoMensagem.PROXIMA_ETAPA, null)
 		iniciar_proxima_etapa()
 		iniciar_turno()
 	else:
+		get_tree().create_timer(0.5).timeout.connect(func(): rotulo_jogador.text = STRING_TURNO_OPONENTE)
 		GerenciadorConexao.enviar_mensagem(GerenciadorConexao.TipoMensagem.FINALIZA_TURNO, null)
 
 func iniciar_proxima_etapa():
